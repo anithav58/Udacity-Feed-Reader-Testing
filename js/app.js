@@ -72,7 +72,7 @@ function loadFeed(id, cb) {
 			});
 
 			if (cb) {
-				cb();
+				cb(result);
 			}
 		},
 		error: function(result, status, err) {
