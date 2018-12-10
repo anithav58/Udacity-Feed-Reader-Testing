@@ -50,10 +50,17 @@ $(
 			it('menu changes visibility', () => {
 				let $menuIcon = $('.menu-icon-link');
 
+				//  making sure that the icon is available in the DOM
 				expect($menuIcon.length).toBe(1);
+				// when the DOM is loaded checking if the slide menu  is hidden
+				// which is defined by the class on the  body element
 				expect($('body').hasClass('menu-hidden')).toBe(true);
+				// triggering the click element
 				$menuIcon.trigger('click');
+				// checking to make sure that the proper class is applied
+				// when the icon click event is triggered
 				expect($('body').hasClass('menu-hidden')).toBe(false);
+				// triggering the click event again to reset to default state
 				$menuIcon.trigger('click');
 			});
 		});
@@ -72,33 +79,52 @@ $(
 		});
 
 		describe('New Feed Selection', () => {
-			let initialResult;
+			//let initialResult;
+			let feedAfterFirstLoad;
+			let feedAfterSecondLoad;
 
 			beforeEach(done => {
-				loadFeed(0, result => {
-					initialResult = result;
-					done();
-				});
-			});
-
-			describe('Update News Feed Selection', () => {
-				let currentResult;
-				beforeEach(done => {
-					loadFeed(1, function(result) {
-						currentResult = result;
+				loadFeed(0, function() {
+					// great place to get content of feed container
+					feedAfterFirstLoad = $('.feed').html();
+					loadFeed(1, function() {
+						// get content of feed container again
+						feedAfterSecondLoad = $('.feed').html();
 						done();
 					});
 				});
-
-				it('has content for the first feed', done => {
-					expect(initialResult).toBeDefined();
-					expect(currentResult).toBeDefined();
-					expect(initialResult.feed.link === currentResult.feed.link).toBe(false);
-					expect(initialResult.feed.title === currentResult.feed.title).toBe(false);
-					expect(initialResult.feed.feedUrl === currentResult.feed.feedUrl).toBe(false);
-					done();
-				});
 			});
+
+			it('has content for the first feed', done => {
+				expect(feedAfterFirstLoad.trim() === feedAfterSecondLoad.trim()).toBe(false);
+				done();
+			});
+
+			// beforeEach(done => {
+			// 	loadFeed(0, result => {
+			// 		initialResult = result;
+			// 		done();
+			// 	});
+			// });
+
+			// describe('Update News Feed Selection', () => {
+			// 	let currentResult;
+			// 	beforeEach(done => {
+			// 		loadFeed(1, function(result) {
+			// 			currentResult = result;
+			// 			done();
+			// 		});
+			// 	});
+
+			// 	it('has content for the first feed', done => {
+			// 		expect(initialResult).toBeDefined();
+			// 		expect(currentResult).toBeDefined();
+			// 		expect(initialResult.feed.link === currentResult.feed.link).toBe(false);
+			// 		expect(initialResult.feed.title === currentResult.feed.title).toBe(false);
+			// 		expect(initialResult.feed.feedUrl === currentResult.feed.feedUrl).toBe(false);
+			// 		done();
+			// 	});
+			// });
 		});
 	})()
 );
